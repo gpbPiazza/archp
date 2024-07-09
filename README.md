@@ -29,7 +29,8 @@ Please see https://pkg.go.dev/github.com/gpbPiazza/archp/ for detailed usage doc
 
 ##### Examples:
 
-- [Simple](https://github.com/gpbPiazza/archp/internal/example/pkgs_dependecies_test)
+- [Simple](https://github.com/gpbPiazza/archp/blob/main/internal/example/pkgs_dependecies_test.go)
+
 
 Disclaimers
 ------
