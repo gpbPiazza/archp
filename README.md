@@ -29,15 +29,15 @@ Please see https://pkg.go.dev/github.com/gpbPiazza/archp/ for detailed usage doc
 
 ##### Examples:
 
-- [Simple](https://github.com/go-playground/validator/blob/master/_examples/simple/main.go)
+- [Simple](https://github.com/gpbPiazza/archp/internal/example/pkgs_dependecies_test)
 
-
-Baked-in Validations
+Disclaimers
 ------
-
 ### Special Notes:
 - archp depends totally on `go/build` package to work, so if your package under test is not in a remote repository it will always return err in the `build.Import` function.
-
+#### Future features:
+- package analyze to nested packages dependencies of children packages
+- options to use `t *testing.T`
 
 License
 -------
@@ -45,4 +45,4 @@ Distributed under MIT License, please see license file within the code for more 
 
 Maintainers
 -----------
-maintainer https://github.com/gpbPiazza
+- [gpbPiazza](https://github.com/gpbPiazza)
