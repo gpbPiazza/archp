@@ -35,9 +35,19 @@ Please see https://pkg.go.dev/github.com/gpbPiazza/archp/ for detailed usage doc
 Disclaimers
 ------
 ### Special Notes:
-- archp depends totally on `go/build` package to work, so if your package under test is not in a remote repository it will always return err in the `build.Import` function.
+1 .archp depends totally on `go/build` package to work, so if your package under test is not in a remote repository it will always return err in the `build.Import` function.
+2. This first version doesn't support validate a package children packages imports, for example:
+````
+-- domain
+        |-- services
+        |        |-- service.go
+        |-- models
+        |        |-- model.go
+````
+The analysis under `domain` package is not supported to validate if the `service.go` file or `model.go` are following the expected rules.
+
 #### Future features:
-- package analyze to nested packages dependencies of children packages
+- solve the especial notes 2. Packages analysis to nested packages dependencies.
 - options to use `t *testing.T`
 
 License
