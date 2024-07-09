@@ -123,7 +123,7 @@ func TestPKGAnalizer_Analize(t *testing.T) {
 		err := analizer.Analize()
 
 		if err != nil {
-			t.Errorf("expected to err to be nil bu got %v", err)
+			t.Errorf("expected to err to be nil but got %v", err)
 		}
 	})
 }
