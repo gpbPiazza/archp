@@ -7,7 +7,7 @@ import (
 )
 
 func TestDependencies_Foo_Test(t *testing.T) {
-	fooAnalizer := archp.NewPKGAnalizer("github.com/gpbPiazza/archp/internal/example/foo")
+	fooAnalizer := archp.NewAnalizer("github.com/gpbPiazza/archp/internal/example/foo")
 
 	err := fooAnalizer.
 		DisallowedDependOn("github.com/gpbPiazza/archp/internal/example/baar").

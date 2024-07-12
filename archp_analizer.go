@@ -16,35 +16,35 @@ var (
 	policyDissalowedDependOn = "dissalowed depend on policy"
 )
 
-func NewPKGAnalizer(importPath string) *PKGAnalizer {
-	return &PKGAnalizer{
+func NewAnalizer(importPath string) *Analizer {
+	return &Analizer{
 		importPath:         importPath,
 		disallowedDependOn: make(map[string]bool),
 	}
 }
 
-type PKGAnalizer struct {
+type Analizer struct {
 	importPath         string
 	disallowedDependOn map[string]bool
 }
 
-func (pkg *PKGAnalizer) Analize() error {
-	buildPkg, err := build.Import(pkg.importPath, localImport, build.ImportComment)
+func (a *Analizer) Analize() error {
+	pkg, err := build.Import(a.importPath, localImport, build.ImportComment)
 	if err != nil {
 		return fmt.Errorf("%w: %w", ErrImport, err)
 	}
 
 	var errs []error
-	for _, importPath := range buildPkg.Imports {
-		if pkg.disallowedDependOn[importPath] {
-			errs = append(errs, newPolicyError(pkg.importPath, policyDissalowedDependOn, importPath))
+	for _, importPath := range pkg.Imports {
+		if a.disallowedDependOn[importPath] {
+			errs = append(errs, newPolicyError(a.importPath, policyDissalowedDependOn, importPath))
 		}
 	}
 
 	return errors.Join(errs...)
 }
 
-func (pkg *PKGAnalizer) DisallowedDependOn(importPath string) *PKGAnalizer {
+func (pkg *Analizer) DisallowedDependOn(importPath string) *Analizer {
 	pkg.disallowedDependOn[importPath] = true
 	return pkg
 }

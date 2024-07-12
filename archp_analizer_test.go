@@ -7,7 +7,7 @@ import (
 
 func TestPKGAnalizer_Constructors(t *testing.T) {
 	t.Run("return pkg analizer with disallowedDependOn prop not nil", func(t *testing.T) {
-		pkgAnalizer := NewPKGAnalizer("testing")
+		pkgAnalizer := NewAnalizer("testing")
 
 		if pkgAnalizer.disallowedDependOn == nil {
 			t.Error("expected to have disallowedDependOn not nil")
@@ -16,7 +16,7 @@ func TestPKGAnalizer_Constructors(t *testing.T) {
 
 	t.Run("return pkg analizer with ImportPath prop with the same passaed as argument", func(t *testing.T) {
 		pkgAnalized := "testing"
-		pkgAnalizer := NewPKGAnalizer(pkgAnalized)
+		pkgAnalizer := NewAnalizer(pkgAnalized)
 
 		if pkgAnalizer.importPath != pkgAnalized {
 			t.Errorf("expected to have ImportPath equals to argument passed but got: %s", pkgAnalizer.importPath)
@@ -25,7 +25,7 @@ func TestPKGAnalizer_Constructors(t *testing.T) {
 
 	t.Run("return pkg analizer with disallowedDependOn map with fmt key", func(t *testing.T) {
 		dependOnPkg := "fmt"
-		pkgAnalizer := NewPKGAnalizer("testing").DisallowedDependOn(dependOnPkg)
+		pkgAnalizer := NewAnalizer("testing").DisallowedDependOn(dependOnPkg)
 
 		if !pkgAnalizer.disallowedDependOn[dependOnPkg] {
 			t.Errorf("expected to have disallowedDependOn key %s", dependOnPkg)
@@ -36,7 +36,7 @@ func TestPKGAnalizer_Constructors(t *testing.T) {
 		dependOnPkg1 := "fmt"
 		dependOnPkg2 := "net/http"
 
-		pkgAnalizer := NewPKGAnalizer("testing").
+		pkgAnalizer := NewAnalizer("testing").
 			DisallowedDependOn(dependOnPkg1).
 			DisallowedDependOn(dependOnPkg2)
 
@@ -52,7 +52,7 @@ func TestPKGAnalizer_Constructors(t *testing.T) {
 	t.Run("if DisallowedDependOn is called twice with the same value should not change the key value", func(t *testing.T) {
 		dependOnPkg1 := "fmt"
 
-		pkgAnalizer := NewPKGAnalizer("testing").
+		pkgAnalizer := NewAnalizer("testing").
 			DisallowedDependOn(dependOnPkg1)
 
 		if !pkgAnalizer.disallowedDependOn[dependOnPkg1] {
@@ -69,7 +69,7 @@ func TestPKGAnalizer_Constructors(t *testing.T) {
 
 func TestPKGAnalizer_Analize(t *testing.T) {
 	t.Run("return error on import package when has a poor importpath", func(t *testing.T) {
-		analizer := NewPKGAnalizer("poor/import/path")
+		analizer := NewAnalizer("poor/import/path")
 
 		err := analizer.Analize()
 
@@ -79,7 +79,7 @@ func TestPKGAnalizer_Analize(t *testing.T) {
 	})
 
 	t.Run("return error of dissallowed to depend on when pkg analized fails on analize", func(t *testing.T) {
-		analizer := NewPKGAnalizer("github.com/gpbPiazza/archp").DisallowedDependOn("errors")
+		analizer := NewAnalizer("github.com/gpbPiazza/archp").DisallowedDependOn("errors")
 
 		err := analizer.Analize()
 
@@ -97,7 +97,7 @@ func TestPKGAnalizer_Analize(t *testing.T) {
 	t.Run("return many errors of dissallowed to depend on when pkg analized fails on analize", func(t *testing.T) {
 		dissalowedDependOnPKGs := []string{"errors", "fmt", "go/build"}
 
-		analizer := NewPKGAnalizer("github.com/gpbPiazza/archp")
+		analizer := NewAnalizer("github.com/gpbPiazza/archp")
 
 		var expectedErrs []error
 		for _, pkg := range dissalowedDependOnPKGs {
@@ -116,7 +116,7 @@ func TestPKGAnalizer_Analize(t *testing.T) {
 	})
 
 	t.Run("return no errors when all policies are ok", func(t *testing.T) {
-		analizer := NewPKGAnalizer("github.com/gpbPiazza/archp").
+		analizer := NewAnalizer("github.com/gpbPiazza/archp").
 			DisallowedDependOn("github.com/gpbPiazza/archp/internal").
 			DisallowedDependOn("github.com/gpbPiazza/archp/internal/example")
 
