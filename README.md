@@ -1,7 +1,8 @@
 Package archp
 =================
-[![GoDoc](https://godoc.org/github.com/TODO-DOC-HERE?status.svg)](https://pkg.go.dev/github.com/gpbPiazza/archp)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gpbPiazza/archp.svg)](https://pkg.go.dev/github.com/gpbPiazza/archp)
 ![License](https://img.shields.io/dub/l/vibe-d.svg)
+
 
 achp enforce architectural rules as errors values or unit tests
 
