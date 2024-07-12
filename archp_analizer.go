@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"go/build"
+	"strings"
 )
 
 var (
@@ -19,13 +20,13 @@ var (
 func NewAnalizer(importPath string) *Analizer {
 	return &Analizer{
 		importPath:         importPath,
-		disallowedDependOn: make(map[string]bool),
+		disallowedDependOn: make([]string, 0),
 	}
 }
 
 type Analizer struct {
 	importPath         string
-	disallowedDependOn map[string]bool
+	disallowedDependOn []string
 }
 
 func (a *Analizer) Analize() error {
@@ -36,15 +37,22 @@ func (a *Analizer) Analize() error {
 
 	var errs []error
 	for _, importPath := range pkg.Imports {
-		if a.disallowedDependOn[importPath] {
-			errs = append(errs, newPolicyError(a.importPath, policyDissalowedDependOn, importPath))
-		}
+		errs = append(errs, a.analizeDisallowedDependOn(importPath))
 	}
 
 	return errors.Join(errs...)
 }
 
-func (pkg *Analizer) DisallowedDependOn(importPath string) *Analizer {
-	pkg.disallowedDependOn[importPath] = true
-	return pkg
+func (a *Analizer) DisallowedDependOn(importPath ...string) *Analizer {
+	a.disallowedDependOn = append(a.disallowedDependOn, importPath...)
+	return a
+}
+
+func (a *Analizer) analizeDisallowedDependOn(importPath string) error {
+	for _, dependOn := range a.disallowedDependOn {
+		if strings.HasPrefix(importPath, dependOn) {
+			return newPolicyError(a.importPath, policyDissalowedDependOn, importPath)
+		}
+	}
+	return nil
 }

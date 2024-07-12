@@ -6,14 +6,6 @@ import (
 )
 
 func TestPKGAnalizer_Constructors(t *testing.T) {
-	t.Run("return pkg analizer with disallowedDependOn prop not nil", func(t *testing.T) {
-		pkgAnalizer := NewAnalizer("testing")
-
-		if pkgAnalizer.disallowedDependOn == nil {
-			t.Error("expected to have disallowedDependOn not nil")
-		}
-	})
-
 	t.Run("return pkg analizer with ImportPath prop with the same passaed as argument", func(t *testing.T) {
 		pkgAnalized := "testing"
 		pkgAnalizer := NewAnalizer(pkgAnalized)
@@ -23,12 +15,19 @@ func TestPKGAnalizer_Constructors(t *testing.T) {
 		}
 	})
 
-	t.Run("return pkg analizer with disallowedDependOn map with fmt key", func(t *testing.T) {
+	t.Run("return pkg analizer with disallowedDependOn slice with fmt in the slice", func(t *testing.T) {
 		dependOnPkg := "fmt"
 		pkgAnalizer := NewAnalizer("testing").DisallowedDependOn(dependOnPkg)
 
-		if !pkgAnalizer.disallowedDependOn[dependOnPkg] {
-			t.Errorf("expected to have disallowedDependOn key %s", dependOnPkg)
+		hasFmt := false
+		for i := range pkgAnalizer.disallowedDependOn {
+			if pkgAnalizer.disallowedDependOn[i] == dependOnPkg {
+				hasFmt = true
+			}
+		}
+
+		if !hasFmt {
+			t.Errorf("expected to have disallowedDependOn value %s", dependOnPkg)
 		}
 	})
 
@@ -40,29 +39,23 @@ func TestPKGAnalizer_Constructors(t *testing.T) {
 			DisallowedDependOn(dependOnPkg1).
 			DisallowedDependOn(dependOnPkg2)
 
-		if !pkgAnalizer.disallowedDependOn[dependOnPkg1] {
-			t.Errorf("expected to have disallowedDependOn key %s", dependOnPkg1)
+		hasFmt := false
+		hasHttp := false
+		for i := range pkgAnalizer.disallowedDependOn {
+			if pkgAnalizer.disallowedDependOn[i] == dependOnPkg1 {
+				hasFmt = true
+			}
+			if pkgAnalizer.disallowedDependOn[i] == dependOnPkg2 {
+				hasHttp = true
+			}
 		}
 
-		if !pkgAnalizer.disallowedDependOn[dependOnPkg2] {
-			t.Errorf("expected to have disallowedDependOn key %s", dependOnPkg2)
-		}
-	})
-
-	t.Run("if DisallowedDependOn is called twice with the same value should not change the key value", func(t *testing.T) {
-		dependOnPkg1 := "fmt"
-
-		pkgAnalizer := NewAnalizer("testing").
-			DisallowedDependOn(dependOnPkg1)
-
-		if !pkgAnalizer.disallowedDependOn[dependOnPkg1] {
-			t.Errorf("expected to have disallowedDependOn key %s", dependOnPkg1)
+		if !hasFmt {
+			t.Errorf("expected to have disallowedDependOn value %s", dependOnPkg1)
 		}
 
-		pkgAnalizer = pkgAnalizer.DisallowedDependOn(dependOnPkg1)
-
-		if !pkgAnalizer.disallowedDependOn[dependOnPkg1] {
-			t.Errorf("expected to have disallowedDependOn key %s", dependOnPkg1)
+		if !hasHttp {
+			t.Errorf("expected to have disallowedDependOn value %s", dependOnPkg2)
 		}
 	})
 }
