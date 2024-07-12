@@ -126,4 +126,5 @@ func TestPKGAnalizer_Analize(t *testing.T) {
 			t.Errorf("expected to err to be nil but got %v", err)
 		}
 	})
+
 }

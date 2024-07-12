@@ -3,8 +3,8 @@ package foobar
 import (
 	"fmt"
 
-	"github.com/gpbPiazza/archp/internal/example/baar"
-	"github.com/gpbPiazza/archp/internal/example/foo"
+	"github.com/gpbPiazza/archp/internal/example/simple/baar"
+	"github.com/gpbPiazza/archp/internal/example/simple/foo"
 )
 
 func OrchestrateFooAndBaar(fooEx, baarEx string) {
